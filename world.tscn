@@ -1,0 +1,94 @@
+[gd_scene load_steps=13 format=3 uid="uid://cpgr5n4ykdiku"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_h61ct"]
+[ext_resource type="Texture2D" uid="uid://d4ntv5byq1j6a" path="res://Textures/grid_black_512x512.png" id="1_l5su5"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8lxy6"]
+
+[sub_resource type="Sky" id="Sky_lldpi"]
+sky_material = SubResource("ProceduralSkyMaterial_8lxy6")
+
+[sub_resource type="Environment" id="Environment_cug3h"]
+background_mode = 2
+sky = SubResource("Sky_lldpi")
+tonemap_mode = 2
+tonemap_white = 16.0
+sdfgi_enabled = true
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_tvhac"]
+auto_exposure_enabled = true
+dof_blur_far_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_st4s5"]
+albedo_texture = ExtResource("1_l5su5")
+uv1_scale = Vector3(5.19, 5.19, 5.19)
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ho3jc"]
+albedo_color = Color(0.678431, 0, 0.678431, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gjd52"]
+albedo_color = Color(1, 0.34902, 0.32549, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s5go4"]
+albedo_color = Color(0.0941176, 1, 0.137255, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_a8lpl"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mq538"]
+
+[node name="World" type="Node"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cug3h")
+camera_attributes = SubResource("CameraAttributesPractical_tvhac")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.965926, -0.25, 0.0669873, 0, 0.258819, 0.965926, -0.258819, -0.933013, 0.25, 0, 0, 0)
+
+[node name="Objects" type="Node3D" parent="."]
+transform = Transform3D(6.415, 0, 0, 0, 6.415, 0, 0, 0, 6.415, 0, 0, 0)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Objects"]
+use_collision = true
+size = Vector3(16, 0.0178223, 16)
+material = SubResource("StandardMaterial3D_st4s5")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3716, 0.256575, -0.195375)
+height = 0.473788
+sides = 64
+material = SubResource("StandardMaterial3D_ho3jc")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05286, 0, -1.86261)
+radial_segments = 100
+rings = 100
+material = SubResource("StandardMaterial3D_gjd52")
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="Objects"]
+transform = Transform3D(0.890078, 0.455809, 1.9924e-08, 0, -4.37114e-08, 1, 0.455809, -0.890078, -3.89065e-08, -0.678044, 0, 1.44567)
+sides = 64
+ring_sides = 64
+material = SubResource("StandardMaterial3D_s5go4")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0486, 0)
+script = ExtResource("1_h61ct")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_a8lpl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_mq538")
+
+[node name="headTarget" type="Node3D" parent="."]
+transform = Transform3D(-0.761957, 0, 0.647628, 0, 1, 0, -0.647628, 0, -0.761957, 0, 1.53803, 0)
+
+[node name="cameraTarget" type="Node3D" parent="headTarget"]
+
+[node name="actualHead" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56909, 0)
+
+[node name="actualCamera" type="Camera3D" parent="actualHead"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
